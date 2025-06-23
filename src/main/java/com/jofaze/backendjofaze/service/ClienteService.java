@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.jofaze.backendjofaze.model.Cliente;
@@ -15,6 +16,9 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public List<Cliente> findAll() {
         return clienteRepository.findAll();
     }
@@ -24,6 +28,9 @@ public class ClienteService {
     }
 
     public Cliente save(Cliente cliente) {
+        if (cliente.getContrasena() != null) {
+            cliente.setContrasena(passwordEncoder.encode(cliente.getContrasena()));
+        }
         return clienteRepository.save(cliente);
     }
 

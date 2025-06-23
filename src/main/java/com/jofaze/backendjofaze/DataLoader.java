@@ -56,7 +56,9 @@ public class DataLoader implements CommandLineRunner {
         for (int i = 0; i < 5; i++) {
             Comuna comuna = new Comuna();
             comuna.setNombre(faker.address().cityName());
-            comuna.setRegion(regiones.get(random.nextInt(regiones.size())));
+            if (!regiones.isEmpty()) {
+                comuna.setRegion(regiones.get(random.nextInt(regiones.size())));
+            }
             comunaRepository.save(comuna);
         }
 
@@ -74,8 +76,12 @@ public class DataLoader implements CommandLineRunner {
             Establecimiento est = new Establecimiento();
             est.setNombre(faker.company().name());
             est.setDireccion(faker.address().streetAddress());
-            est.setComuna(comunas.get(random.nextInt(comunas.size())));
-            est.setTipoEstablecimiento(tipos.get(random.nextInt(tipos.size())));
+            if (!comunas.isEmpty()) {
+                est.setComuna(comunas.get(random.nextInt(comunas.size())));
+            }
+            if (!tipos.isEmpty()) {
+                est.setTipoEstablecimiento(tipos.get(random.nextInt(tipos.size())));
+            }
             est.setEmail(faker.internet().emailAddress());                              
             est.setTelefono(faker.phoneNumber().cellPhone()); 
             establecimientoRepository.save(est);
@@ -89,7 +95,9 @@ public class DataLoader implements CommandLineRunner {
             admin.setCargo(faker.job().position());
             admin.setEmail(faker.internet().emailAddress());
             admin.setTelefono(faker.phoneNumber().cellPhone());
-            admin.setEstablecimiento(establecimientos.get(random.nextInt(establecimientos.size())));
+            if (!establecimientos.isEmpty()) {
+                admin.setEstablecimiento(establecimientos.get(random.nextInt(establecimientos.size())));
+            }
             administradorRepository.save(admin);
         }
 
@@ -99,7 +107,8 @@ public class DataLoader implements CommandLineRunner {
             cliente.setNombre(faker.name().firstName());
             cliente.setApellido(faker.name().lastName());
             cliente.setTelefono(faker.phoneNumber().cellPhone());
-            cliente.setEmail(faker.internet().emailAddress()); // <-- Añadir esta línea
+            cliente.setEmail(faker.internet().emailAddress());
+            cliente.setContrasena("123" + i);
             clienteRepository.save(cliente);
         }
     }

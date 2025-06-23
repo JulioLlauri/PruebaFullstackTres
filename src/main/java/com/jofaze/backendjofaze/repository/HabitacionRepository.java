@@ -32,4 +32,12 @@ public interface HabitacionRepository extends JpaRepository<Habitacion, Long> {
 
     @Query("SELECT h FROM Habitacion h WHERE h.capacidad >= :capacidad")
     List<Habitacion> buscarPorCapacidadMinima(@Param("capacidad") Integer capacidad);
+
+    @Query("SELECT h FROM Habitacion h JOIN h.establecimiento e JOIN e.comuna c JOIN c.region r WHERE h.tipo = :tipo AND e.nombre = :nombreEstablecimiento AND c.nombre = :nombreComuna AND r.nombre = :nombreRegion")
+    List<Habitacion> buscarHabitacionesPorTipoYEstablecimientoYComunaYRegion(
+        @Param("tipo") String tipo,
+        @Param("nombreEstablecimiento") String nombreEstablecimiento,
+        @Param("nombreComuna") String nombreComuna,
+        @Param("nombreRegion") String nombreRegion
+    );
 }

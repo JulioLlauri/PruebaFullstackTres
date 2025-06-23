@@ -32,4 +32,7 @@ public class Cliente {
 
     @Column(nullable = false, length = 100, unique = true)
     private String email;
+
+    @Column(nullable = false)
+    private String contrasena;
 }

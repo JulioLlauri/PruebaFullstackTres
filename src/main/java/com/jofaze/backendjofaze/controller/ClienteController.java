@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
 import com.jofaze.backendjofaze.assemblers.ClienteAssembler;
+import com.jofaze.backendjofaze.dto.ClienteDTO;
 import com.jofaze.backendjofaze.model.Cliente;
 import com.jofaze.backendjofaze.service.ClienteService;
 
@@ -38,8 +39,8 @@ public class ClienteController {
 
     @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
     @Operation(summary = "Obtener todos los clientes", description = "Obtiene una lista de todos los clientes")
-    public CollectionModel<EntityModel<Cliente>> listar() {
-        List<EntityModel<Cliente>> clientes = clienteService.findAll().stream()
+    public CollectionModel<EntityModel<ClienteDTO>> listar() {
+        List<EntityModel<ClienteDTO>> clientes = clienteService.findAll().stream()
             .map(assembler::toModel)
             .collect(Collectors.toList());
 
@@ -50,7 +51,7 @@ public class ClienteController {
 
     @GetMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
     @Operation(summary = "Obtener cliente por ID", description = "Obtiene un cliente por su ID")
-    public ResponseEntity<EntityModel<Cliente>> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<EntityModel<ClienteDTO>> buscarPorId(@PathVariable Long id) {
         return clienteService.findById(id)
             .map(assembler::toModel)
             .map(ResponseEntity::ok)
@@ -59,7 +60,7 @@ public class ClienteController {
 
     @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
     @Operation(summary = "Crear cliente", description = "Crea un nuevo cliente")
-    public ResponseEntity<EntityModel<Cliente>> guardar(@RequestBody Cliente cliente) {
+    public ResponseEntity<EntityModel<ClienteDTO>> guardar(@RequestBody Cliente cliente) {
         Cliente nuevoCliente = clienteService.save(cliente);
         return ResponseEntity
             .created(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClienteController.class).buscarPorId(nuevoCliente.getId())).toUri())
@@ -68,7 +69,7 @@ public class ClienteController {
 
     @PutMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
     @Operation(summary = "Actualizar cliente", description = "Actualiza completamente un cliente existente")
-    public ResponseEntity<EntityModel<Cliente>> actualizar(@PathVariable Long id, @RequestBody Cliente cliente) {
+    public ResponseEntity<EntityModel<ClienteDTO>> actualizar(@PathVariable Long id, @RequestBody Cliente cliente) {
         Cliente actualizado = clienteService.actualizarCliente(id, cliente);
         if (actualizado == null) {
             return ResponseEntity.notFound().build();
@@ -78,7 +79,7 @@ public class ClienteController {
 
     @PatchMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
     @Operation(summary = "Actualizar parcialmente cliente", description = "Actualiza parcialmente un cliente existente")
-    public ResponseEntity<EntityModel<Cliente>> patchCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
+    public ResponseEntity<EntityModel<ClienteDTO>> patchCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
         Cliente actualizado = clienteService.patchCliente(id, cliente);
         if (actualizado == null) {
             return ResponseEntity.notFound().build();
